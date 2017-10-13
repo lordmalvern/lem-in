@@ -6,7 +6,7 @@
 /*   By: bpuschel <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/11 21:58:24 by bpuschel          #+#    #+#             */
-/*   Updated: 2017/10/13 14:37:17 by bpuschel         ###   ########.fr       */
+/*   Updated: 2017/10/13 15:59:11 by bpuschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static void	init_ends(t_room **r, t_htable **out, char *cur)
 		h_insert(out, *r);
 	}
 	while (i >= 0)
-		ft_strdel(&l[i--]);
+		free(l[i--]);
 	free(l);
 }
 
@@ -57,7 +57,7 @@ static void	init_room(t_htable **out, char *cur)
 		free(r);
 	}
 	while (--i >= 0)
-		ft_strdel(&l[i]);
+		free(l[i]);
 	free(l);
 }
 
@@ -82,7 +82,7 @@ static void	build(t_room **start, t_room **end, t_htable **out)
 	while (get_next_line(0, &cur) && is_valid(cur))
 	{
 		ft_printf("%s\n", cur);
-		if ((ft_strequ(cur, "##start") && (*start)->r_name) 
+		if ((ft_strequ(cur, "##start") && (*start)->r_name)
 				|| (ft_strequ(cur, "##end") && (*end)->r_name))
 			break ;
 		else if (ft_strequ(cur, "##start"))
@@ -120,7 +120,8 @@ t_htable	*init_rooms(t_room **start, t_room **end, t_ant ***ants)
 		(*start)->num_adj = (get_room(&out, (*start)->r_name))->num_adj;
 		(*end)->num_adj = (get_room(&out, (*end)->r_name))->num_adj;
 	}
-	if (!(*start)->r_name || !(*end)->r_name)
+	if (!(*start)->r_name || !(*end)->r_name
+			|| (*start)->num_adj == 0 || (*end)->num_adj == 0)
 		ants_del(ants, (*start)->num_ants);
 	return (out);
 }

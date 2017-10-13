@@ -6,7 +6,7 @@
 /*   By: bpuschel <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/11 10:32:13 by bpuschel          #+#    #+#             */
-/*   Updated: 2017/10/13 13:55:10 by bpuschel         ###   ########.fr       */
+/*   Updated: 2017/10/13 15:23:34 by bpuschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void			room_del(void *content, size_t size)
 		if (ptr->adj)
 			while (++i <= ptr->num_adj)
 				free(ptr->adj[i]);
-		ft_strdel(&ptr->r_name);
+		free(ptr->r_name);
 		free(ptr->adj);
 		free(ptr);
 	}

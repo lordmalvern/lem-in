@@ -6,7 +6,7 @@
 /*   By: bpuschel <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/10 19:35:14 by bpuschel          #+#    #+#             */
-/*   Updated: 2017/10/13 14:54:17 by bpuschel         ###   ########.fr       */
+/*   Updated: 2017/10/13 15:52:18 by bpuschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ int				h_index(t_htable *h, char *k)
 	j = -1;
 	while (k[++j] != '\0')
 		i += k[j];
-	i %= H_SIZE;
+	i = ABS(i % H_SIZE);
 	while (h->keys[i])
 	{
 		curr = h->keys[i];
@@ -96,7 +96,7 @@ int				h_index(t_htable *h, char *k)
 				return (i);
 			curr = curr->next;
 		}
-		i = (i + 1) % H_SIZE;
+		i = ABS((i + 1) % H_SIZE);
 	}
 	return (i);
 }
