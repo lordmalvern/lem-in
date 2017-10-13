@@ -6,13 +6,13 @@
 /*   By: bpuschel <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/11 21:58:24 by bpuschel          #+#    #+#             */
-/*   Updated: 2017/10/13 01:35:53 by bpuschel         ###   ########.fr       */
+/*   Updated: 2017/10/13 13:01:35 by bpuschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/lem-in.h"
 
-static void		init_ends(t_room **r, t_htable **out, char *cur)
+static void	init_ends(t_room **r, t_htable **out, char *cur)
 {
 	char		**l;
 	int			i;
@@ -33,7 +33,7 @@ static void		init_ends(t_room **r, t_htable **out, char *cur)
 	free(l);
 }
 
-static void		init_room(t_htable **out, char *cur)
+static void	init_room(t_htable **out, char *cur)
 {
 	char		**l;
 	int			i;
@@ -50,6 +50,7 @@ static void		init_room(t_htable **out, char *cur)
 		r->x = ft_atoi(l[1]);
 		r->y = ft_atoi(l[2]);
 		r->num_adj = 0;
+		r->adj = NULL;
 		r->num_ants = 0;
 		h_insert(out, r);
 		ft_strdel(&(r->r_name));
@@ -60,47 +61,57 @@ static void		init_room(t_htable **out, char *cur)
 	free(l);
 }
 
-t_htable		*init_rooms(t_room **start, t_room **end, t_ant ***ants)
+static void	build_ends(t_room **start, t_htable **out)
+{
+	char	*cur;
+
+	if ((*start)->r_name)
+		return ;
+	get_next_line(0, &cur);
+	ft_printf("%s\n", cur);
+	if (LEGAL(cur[0]) && ft_strchr(cur, ' ') != NULL)
+		init_ends(start, out, cur);
+	ft_strdel(&cur);
+}
+
+static void	build(t_room **start, t_room **end, t_htable **out)
+{
+	char	*cur;
+
+	cur = NULL;
+	while (get_next_line(0, &cur) && is_valid(cur))
+	{
+		ft_printf("%s\n", cur);
+		if (ft_strequ(cur, "##start")) 
+			build_ends(start, out);
+		else if (ft_strequ(cur, "##end"))
+			build_ends(end, out);
+		else if (LEGAL(cur[0]) && ft_strchr(cur, ' ') != NULL)
+			init_room(out, cur);
+		else if (LEGAL(cur[0]) && ft_strchr(cur, '-') != NULL)
+			add_adj(cur, out);
+		ft_strdel(&cur);
+	}
+	ft_strdel(&cur);
+}
+
+t_htable	*init_rooms(t_room **start, t_room **end, t_ant ***ants)
 {
 	t_htable	*out;
 	char		*cur;
 	
-	
-	if (get_next_line(0, &cur) == 0 || !ft_isint(cur))
+	cur = NULL;
+	if (get_next_line(0, &cur) <= 0 || !ft_isint(cur))
 	{
-		ft_strdel(&cur);
+		if (cur)
+			ft_strdel(&cur);
 		return (NULL);
 	}
 	out = h_new();
 	(*start)->num_ants = ft_atoi(cur);
 	*ants = (t_ant **)ft_memalloc((*start)->num_ants * sizeof(t_ant *));
 	ft_strdel(&cur);
-	while (get_next_line(0, &cur))
-	{
-		ft_printf("%s\n", cur);
-		if (ft_strequ(cur, "##start"))
-		{
-			ft_strdel(&cur);
-			get_next_line(0, &cur);
-			ft_printf("%s\n", cur);
-			if (cur[0] != '#' && cur[0] != 'L' && ft_strchr(cur, '-') == NULL)
-				init_ends(start, &out, cur);
-		}
-		else if (ft_strequ(cur, "##end"))
-		{
-			ft_strdel(&cur);
-			get_next_line(0, &cur);
-			ft_printf("%s\n", cur);
-			if (cur[0] != '#' && cur[0] != 'L' && ft_strchr(cur, '-') == NULL)
-				init_ends(end, &out, cur);
-		}
-		else if (cur[0] != '#' && cur[0] != 'L'
-				&& ft_strchr(cur, '-') == NULL)
-			init_room(&out, cur);
-		else if (cur[0] != '#' && cur[0] != 'L')
-			add_adj(cur, &out);
-		ft_strdel(&cur);
-	}
+	build(start, end, &out);
 	if (out->size > 0 && (*start)->r_name && (*end)->r_name)
 	{
 		(*start)->num_adj = (get_room(&out, (*start)->r_name))->num_adj;
@@ -108,61 +119,5 @@ t_htable		*init_rooms(t_room **start, t_room **end, t_ant ***ants)
 	}
 	if (!(*start)->r_name || !(*end)->r_name)
 		ants_del(ants, (*start)->num_ants);
-	ft_strdel(&cur);
 	return (out);
-}
-
-static void		adj_add(t_room **a, t_room **b)
-{
-	char	**a_new;
-	char	**b_new;
-	int		i;
-
-	a_new = (char **)ft_memalloc(((*a)->num_adj + 1) * sizeof(char *));
-	b_new = (char **)ft_memalloc(((*b)->num_adj + 1) * sizeof(char *));
-	i = -1;
-	while (++i < (*a)->num_adj)
-	{
-		a_new[i] = ft_strdup((*a)->adj[i]);
-		ft_strdel(&((*a)->adj[i]));
-	}
-	a_new[i] = ft_strdup((*b)->r_name);
-	free((*a)->adj);
-	(*a)->adj = a_new;
-	i = -1;
-	while (++i < (*b)->num_adj)
-	{
-		b_new[i] = ft_strdup((*b)->adj[i]);
-		ft_strdel(&((*b)->adj[i]));
-	}
-	b_new[i] = ft_strdup((*b)->r_name);
-	free((*b)->adj);
-	(*b)->adj = b_new;
-}
-
-void			add_adj(char *cur, t_htable **out)
-{
-	char	**l;
-	int		i;
-	t_room	*a;
-	t_room	*b;
-
-	l = ft_strsplit(cur, '-');
-	i = 0;
-	while (l[i] != NULL)
-		i++;
-	if (i == 2 && l[0] && l[1])
-	{
-		a = get_room(out, l[0]);
-		b = get_room(out, l[1]);
-		if (a && b)
-		{
-			adj_add(&a, &b);
-			a->num_adj++;
-			b->num_adj++;
-		}
-	}
-	while (i >= 0)
-		ft_strdel(&l[i--]);
-	free(l);
 }

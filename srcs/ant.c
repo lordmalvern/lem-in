@@ -6,7 +6,7 @@
 /*   By: bpuschel <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/11 11:57:35 by bpuschel          #+#    #+#             */
-/*   Updated: 2017/10/13 00:18:31 by bpuschel         ###   ########.fr       */
+/*   Updated: 2017/10/13 05:43:14 by bpuschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,8 @@ static void		step_next(t_ant **ant, t_htable **f, t_room **e)
 	while (++i < c->num_adj)
 	{
 		n = get_room(f, c->adj[i]);
-		if ((n->num_ants == 0 && n->dist <= c->dist) 
-				|| (n->num_ants >= 0 && ft_strequ((*e)->r_name, n->r_name)))
+		if (n && ((n->num_ants >= 0 && ft_strequ((*e)->r_name, n->r_name))
+				|| (n->num_ants == 0 && n->dist <= c->dist)))
 			break ;
 	}
 	if (i < c->num_adj)
@@ -87,17 +87,20 @@ t_room			*get_room(t_htable **h, char *k)
 	int		i;
 	t_list	*curr;
 	t_room	*c;
-
+	if (!k || !LEGAL(k[0]))
+		return (NULL);
 	i = h_index(*h, k);
 	curr = (*h)->values[i];
-	c = (t_room *)CUR(curr);
-	while (curr && !ft_strequ(c->r_name, k))
-	{
-		curr = curr->next;
-		c = (t_room *)CUR(curr);
-	}
 	if (curr)
+	{
+		c = (t_room *)CUR(curr);
+		while (curr && !ft_strequ(c->r_name, k))
+		{
+			curr = curr->next;
+			c = (t_room *)CUR(curr);
+		}
 		return (CUR(curr));
+	}
 	return (NULL);
 }
 

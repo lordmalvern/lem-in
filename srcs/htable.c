@@ -6,7 +6,7 @@
 /*   By: bpuschel <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/10 19:35:14 by bpuschel          #+#    #+#             */
-/*   Updated: 2017/10/13 01:26:05 by bpuschel         ###   ########.fr       */
+/*   Updated: 2017/10/13 07:24:38 by bpuschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ void			h_insert(t_htable **h, t_room *f)
 	i = h_index(*h, f->r_name);
 	key = ft_lstnew((f->r_name), ft_strlen(f->r_name) * sizeof(char) + 1);
 	val = val_lstnew(f);
+	
 	if ((*h)->keys[i] == NULL)
 		(*h)->keys[i] = key;
 	else

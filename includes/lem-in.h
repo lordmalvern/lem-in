@@ -6,7 +6,7 @@
 /*   By: bpuschel <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/10 14:36:17 by bpuschel          #+#    #+#             */
-/*   Updated: 2017/10/12 23:20:50 by bpuschel         ###   ########.fr       */
+/*   Updated: 2017/10/13 10:43:54 by bpuschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,9 @@
 # define CUR(a) ((a)->content)
 # define NXT(a) (a)->next->content
 # define ABS(a) ((a < 0) ? a * -1 : a);
-# define H_SIZE 1000
+# define H_SIZE 5000
 # define Q_EMPTY(q) ((q)->start == (q)->end)
+# define LEGAL(a) (a != '#' && a != 'L')
 
 typedef struct	s_ant
 {
@@ -72,4 +73,6 @@ void			bfs(t_htable *h, char *s);
 t_q				*new_q(void);
 void			push(t_q *q, char *c);
 char			*pop(t_q *q);
+
+int				is_valid(char *c);
 #endif
