@@ -6,17 +6,17 @@
 /*   By: bpuschel <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/11 11:57:35 by bpuschel          #+#    #+#             */
-/*   Updated: 2017/10/13 05:43:14 by bpuschel         ###   ########.fr       */
+/*   Updated: 2017/10/13 14:00:31 by bpuschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/lem-in.h"
+#include "../includes/lem_in.h"
 
 static void		step_next(t_ant **ant, t_htable **f, t_room **e)
 {
-	t_room *n;
-	t_room *c;
-	int i;
+	t_room	*n;
+	t_room	*c;
+	int		i;
 
 	i = -1;
 	if (ft_strequ((*ant)->room, (*e)->r_name))
@@ -35,10 +35,10 @@ static void		step_next(t_ant **ant, t_htable **f, t_room **e)
 
 void			find_path(t_ant ***ants, t_htable **f, t_room **s, t_room **e)
 {
-	int i;
-	int tot_ants;
-	int	p_path;
-	t_room *end;
+	int		i;
+	int		tot_ants;
+	int		p_path;
+	t_room	*end;
 
 	tot_ants = (*s)->num_ants;
 	end = get_room(f, (*e)->r_name);
@@ -63,8 +63,8 @@ void			find_path(t_ant ***ants, t_htable **f, t_room **s, t_room **e)
 
 void			next_room(t_ant **ant, t_room **c, t_room **n)
 {
-	char **n_path;
-	int i;
+	char	**n_path;
+	int		i;
 
 	n_path = (char **)ft_memalloc(((*ant)->path_len + 1) * sizeof(char *));
 	(*c)->num_ants--;
@@ -87,6 +87,7 @@ t_room			*get_room(t_htable **h, char *k)
 	int		i;
 	t_list	*curr;
 	t_room	*c;
+
 	if (!k || !LEGAL(k[0]))
 		return (NULL);
 	i = h_index(*h, k);
@@ -107,6 +108,7 @@ t_room			*get_room(t_htable **h, char *k)
 t_ant			*init_ant(int i, t_room **s)
 {
 	t_ant *out;
+
 	out = (t_ant *)ft_memalloc(sizeof(t_ant));
 	out->id = i + 1;
 	out->room = (*s)->r_name;

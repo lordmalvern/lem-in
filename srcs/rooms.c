@@ -6,13 +6,13 @@
 /*   By: bpuschel <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/13 09:12:48 by bpuschel          #+#    #+#             */
-/*   Updated: 2017/10/13 13:37:14 by bpuschel         ###   ########.fr       */
+/*   Updated: 2017/10/13 14:03:41 by bpuschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/lem-in.h"
+#include "../includes/lem_in.h"
 
-int	is_valid(char *c)
+int				is_valid(char *c)
 {
 	int i;
 	int spaces;

@@ -6,11 +6,11 @@
 /*   By: bpuschel <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/13 08:44:11 by bpuschel          #+#    #+#             */
-/*   Updated: 2017/10/13 08:44:31 by bpuschel         ###   ########.fr       */
+/*   Updated: 2017/10/13 14:03:00 by bpuschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/lem-in.h"
+#include "../includes/lem_in.h"
 
 t_q				*new_q(void)
 {

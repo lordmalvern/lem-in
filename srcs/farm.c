@@ -6,22 +6,22 @@
 /*   By: bpuschel <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/11 21:58:24 by bpuschel          #+#    #+#             */
-/*   Updated: 2017/10/13 13:01:35 by bpuschel         ###   ########.fr       */
+/*   Updated: 2017/10/13 14:37:17 by bpuschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/lem-in.h"
+#include "../includes/lem_in.h"
 
 static void	init_ends(t_room **r, t_htable **out, char *cur)
 {
 	char		**l;
 	int			i;
-	
+
 	l = ft_strsplit(cur, ' ');
 	i = 0;
 	while (l[i] != NULL)
 		i++;
-	if (i == 3 && l[0] && l[1] && l[2])
+	if (i == 3 && l[0] && l[1] && l[2] && !(*r)->r_name)
 	{
 		(*r)->r_name = ft_strdup(l[0]);
 		(*r)->x = ft_atoi(l[1]);
@@ -38,7 +38,7 @@ static void	init_room(t_htable **out, char *cur)
 	char		**l;
 	int			i;
 	t_room		*r;
-	
+
 	l = ft_strsplit(cur, ' ');
 	i = 0;
 	while (l[i] != NULL)
@@ -82,7 +82,10 @@ static void	build(t_room **start, t_room **end, t_htable **out)
 	while (get_next_line(0, &cur) && is_valid(cur))
 	{
 		ft_printf("%s\n", cur);
-		if (ft_strequ(cur, "##start")) 
+		if ((ft_strequ(cur, "##start") && (*start)->r_name) 
+				|| (ft_strequ(cur, "##end") && (*end)->r_name))
+			break ;
+		else if (ft_strequ(cur, "##start"))
 			build_ends(start, out);
 		else if (ft_strequ(cur, "##end"))
 			build_ends(end, out);
@@ -99,7 +102,7 @@ t_htable	*init_rooms(t_room **start, t_room **end, t_ant ***ants)
 {
 	t_htable	*out;
 	char		*cur;
-	
+
 	cur = NULL;
 	if (get_next_line(0, &cur) <= 0 || !ft_isint(cur))
 	{

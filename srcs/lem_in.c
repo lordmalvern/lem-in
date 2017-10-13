@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lem-in.c                                           :+:      :+:    :+:   */
+/*   lem_in.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bpuschel <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/12 00:22:42 by bpuschel          #+#    #+#             */
-/*   Updated: 2017/10/12 18:46:08 by bpuschel         ###   ########.fr       */
+/*   Updated: 2017/10/13 13:53:43 by bpuschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/lem-in.h"
+#include "../includes/lem_in.h"
 
-int	main()
+int	main(void)
 {
 	t_htable	*farm;
 	t_room		*start;
@@ -36,4 +36,5 @@ int	main()
 	room_del(start, 0);
 	room_del(end, 0);
 	h_del(&farm);
+	return (0);
 }

@@ -6,11 +6,11 @@
 /*   By: bpuschel <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/11 10:32:13 by bpuschel          #+#    #+#             */
-/*   Updated: 2017/10/13 13:36:43 by bpuschel         ###   ########.fr       */
+/*   Updated: 2017/10/13 13:55:10 by bpuschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/lem-in.h"
+#include "../includes/lem_in.h"
 
 void			char_del(void *content, size_t size)
 {
