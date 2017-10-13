@@ -6,7 +6,7 @@
 /*   By: bpuschel <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/11 10:32:13 by bpuschel          #+#    #+#             */
-/*   Updated: 2017/10/12 10:42:28 by bpuschel         ###   ########.fr       */
+/*   Updated: 2017/10/13 01:33:46 by bpuschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,11 @@ void			room_del(void *content, size_t size)
 		ptr = (t_room *)content;
 		ft_strdel(&ptr->r_name);
 		i = -1;
-		while (++i < ptr->num_adj)
-			ft_strdel(&ptr->adj[i]);
+		if (ptr->adj)
+		{
+			while (++i < ptr->num_adj)
+				ft_strdel(&ptr->adj[i]);
+		}
 		free(ptr->adj);
 		free(ptr);
 	}
@@ -40,5 +43,19 @@ void			room_del(void *content, size_t size)
 void			ants_del(t_ant ***ants, int tot)
 {
 	int i;
-	
+	int j;
+
+	i = -1;
+	while (++i < tot)
+	{
+		j = -1;
+		if ((ants[0][i])->path)
+		{
+			while (++j < (ants[0][i])->path_len)
+				free((ants[0][i])->path[j]);
+		}
+		free(ants[0][i]->path);
+		free(ants[0][i]);
+	}
+	free(ants[0]);
 }

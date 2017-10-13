@@ -6,13 +6,13 @@
 /*   By: bpuschel <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/11 11:57:35 by bpuschel          #+#    #+#             */
-/*   Updated: 2017/10/12 16:15:51 by bpuschel         ###   ########.fr       */
+/*   Updated: 2017/10/13 00:18:31 by bpuschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/lem-in.h"
 
-static void		step_next(t_ant **ant, t_htable **f, t_room **s, t_room **e)
+static void		step_next(t_ant **ant, t_htable **f, t_room **e)
 {
 	t_room *n;
 	t_room *c;
@@ -21,10 +21,10 @@ static void		step_next(t_ant **ant, t_htable **f, t_room **s, t_room **e)
 	i = -1;
 	if (ft_strequ((*ant)->room, (*e)->r_name))
 		return ;
-	c = get_room(*f, (*ant)->room);
+	c = get_room(f, (*ant)->room);
 	while (++i < c->num_adj)
 	{
-		n = get_room(*f, c->adj[i]);
+		n = get_room(f, c->adj[i]);
 		if ((n->num_ants == 0 && n->dist <= c->dist) 
 				|| (n->num_ants >= 0 && ft_strequ((*e)->r_name, n->r_name)))
 			break ;
@@ -38,19 +38,21 @@ void			find_path(t_ant ***ants, t_htable **f, t_room **s, t_room **e)
 	int i;
 	int tot_ants;
 	int	p_path;
+	t_room *end;
 
 	tot_ants = (*s)->num_ants;
+	end = get_room(f, (*e)->r_name);
 	i = -1;
 	while (++i < tot_ants)
 		ants[0][i] = init_ant(i, s);
 	bfs(*f, (*e)->r_name);
-	while ((*e)->num_ants < tot_ants)
+	while (end->num_ants < tot_ants)
 	{
 		i = -1;
 		while (++i < tot_ants)
 		{
 			p_path = (ants[0][i])->path_len;
-			step_next(&(ants[0][i]), f, s, e);
+			step_next(&(ants[0][i]), f, e);
 			if (p_path < (ants[0][i])->path_len)
 				ft_printf("L%d-%s ", (ants[0][i])->id, (ants[0][i])->room);
 		}
@@ -80,15 +82,20 @@ void			next_room(t_ant **ant, t_room **c, t_room **n)
 	(*ant)->path_len++;
 }
 
-t_room			*get_room(t_htable *h, char *k)
+t_room			*get_room(t_htable **h, char *k)
 {
 	int		i;
 	t_list	*curr;
+	t_room	*c;
 
-	i = h_index(h, k);
-	curr = h->values[i];
-	while (curr && !ft_strequ(((t_room *)CUR(curr))->r_name, k))
+	i = h_index(*h, k);
+	curr = (*h)->values[i];
+	c = (t_room *)CUR(curr);
+	while (curr && !ft_strequ(c->r_name, k))
+	{
 		curr = curr->next;
+		c = (t_room *)CUR(curr);
+	}
 	if (curr)
 		return (CUR(curr));
 	return (NULL);

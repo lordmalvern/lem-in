@@ -6,7 +6,7 @@
 /*   By: bpuschel <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/11 21:58:24 by bpuschel          #+#    #+#             */
-/*   Updated: 2017/10/12 12:09:17 by bpuschel         ###   ########.fr       */
+/*   Updated: 2017/10/13 01:35:53 by bpuschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static void		init_ends(t_room **r, t_htable **out, char *cur)
 		(*r)->r_name = ft_strdup(l[0]);
 		(*r)->x = ft_atoi(l[1]);
 		(*r)->y = ft_atoi(l[2]);
-		h_insert(*out, *r);
+		h_insert(out, *r);
 	}
 	while (i >= 0)
 		ft_strdel(&l[i--]);
@@ -41,7 +41,7 @@ static void		init_room(t_htable **out, char *cur)
 	
 	l = ft_strsplit(cur, ' ');
 	i = 0;
-	while (!ft_strequ(l[i], "\0"))
+	while (l[i] != NULL)
 		i++;
 	if (i == 3 && l[0] && l[1] && l[2])
 	{
@@ -51,7 +51,7 @@ static void		init_room(t_htable **out, char *cur)
 		r->y = ft_atoi(l[2]);
 		r->num_adj = 0;
 		r->num_ants = 0;
-		h_insert(*out, r);
+		h_insert(out, r);
 		ft_strdel(&(r->r_name));
 		free(r);
 	}
@@ -65,35 +65,50 @@ t_htable		*init_rooms(t_room **start, t_room **end, t_ant ***ants)
 	t_htable	*out;
 	char		*cur;
 	
-	get_next_line(0, &cur);
-	if (!ft_isint(cur))
+	
+	if (get_next_line(0, &cur) == 0 || !ft_isint(cur))
+	{
+		ft_strdel(&cur);
 		return (NULL);
+	}
 	out = h_new();
 	(*start)->num_ants = ft_atoi(cur);
 	*ants = (t_ant **)ft_memalloc((*start)->num_ants * sizeof(t_ant *));
+	ft_strdel(&cur);
 	while (get_next_line(0, &cur))
 	{
 		ft_printf("%s\n", cur);
 		if (ft_strequ(cur, "##start"))
 		{
+			ft_strdel(&cur);
 			get_next_line(0, &cur);
 			ft_printf("%s\n", cur);
-			init_ends(start, &out, cur);
+			if (cur[0] != '#' && cur[0] != 'L' && ft_strchr(cur, '-') == NULL)
+				init_ends(start, &out, cur);
 		}
 		else if (ft_strequ(cur, "##end"))
 		{
+			ft_strdel(&cur);
 			get_next_line(0, &cur);
 			ft_printf("%s\n", cur);
-			init_ends(end, &out, cur);
+			if (cur[0] != '#' && cur[0] != 'L' && ft_strchr(cur, '-') == NULL)
+				init_ends(end, &out, cur);
 		}
 		else if (cur[0] != '#' && cur[0] != 'L'
 				&& ft_strchr(cur, '-') == NULL)
 			init_room(&out, cur);
 		else if (cur[0] != '#' && cur[0] != 'L')
 			add_adj(cur, &out);
+		ft_strdel(&cur);
 	}
-	(*start)->num_adj = (get_room(out, (*start)->r_name))->num_adj;
-	(*end)->num_adj = (get_room(out, (*end)->r_name))->num_adj;
+	if (out->size > 0 && (*start)->r_name && (*end)->r_name)
+	{
+		(*start)->num_adj = (get_room(&out, (*start)->r_name))->num_adj;
+		(*end)->num_adj = (get_room(&out, (*end)->r_name))->num_adj;
+	}
+	if (!(*start)->r_name || !(*end)->r_name)
+		ants_del(ants, (*start)->num_ants);
+	ft_strdel(&cur);
 	return (out);
 }
 
@@ -138,8 +153,8 @@ void			add_adj(char *cur, t_htable **out)
 		i++;
 	if (i == 2 && l[0] && l[1])
 	{
-		a = get_room(*out, l[0]);
-		b = get_room(*out, l[1]);
+		a = get_room(out, l[0]);
+		b = get_room(out, l[1]);
 		if (a && b)
 		{
 			adj_add(&a, &b);

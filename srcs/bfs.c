@@ -6,7 +6,7 @@
 /*   By: bpuschel <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/12 14:00:54 by bpuschel          #+#    #+#             */
-/*   Updated: 2017/10/12 16:15:38 by bpuschel         ###   ########.fr       */
+/*   Updated: 2017/10/13 01:28:58 by bpuschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,10 +81,10 @@ static void		del_q(t_q **q)
 	int i;
 
 	i = -1;
-	while (++i < (*q)->size)
-		ft_strdel(&((*q)->buf[i]));
+	while (++i < (int)(*q)->size)
+		free(((*q)->buf[i]));
 	free((*q)->buf);
-	free(q);
+	free(*q);
 }
 
 void			bfs(t_htable *h, char *s)
@@ -94,6 +94,7 @@ void			bfs(t_htable *h, char *s)
 	t_room	*n;
 	int		d;
 	int		i;
+	char	*p;
 
 	q = new_q();
 	d = -1;
@@ -101,17 +102,19 @@ void			bfs(t_htable *h, char *s)
 	while (!Q_EMPTY(q))
 	{
 		i = -1;
-		c = get_room(h, pop(q));
+		p = pop(q);
+		c = get_room(&h, p);
 		c->dist = ++d;
 		while (++i < c->num_adj)
 		{
-			n = get_room(h, c->adj[i]);
+			n = get_room(&h, c->adj[i]);
 			if (n->dist == INT_MAX)
 			{
 				n->dist = d + 1;
 				push(q, n->r_name);
 			}
 		}
+		ft_strdel(&p);
 	}
 	del_q(&q);
 }
