@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: bpuschel <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/10/10 19:35:14 by bpuschel          #+#    #+#             */
-/*   Updated: 2017/10/13 15:52:18 by bpuschel         ###   ########.fr       */
+/*   Created: 2017/10/13 16:51:46 by bpuschel          #+#    #+#             */
+/*   Updated: 2017/10/13 17:15:10 by bpuschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ static t_list	*val_lstnew(t_room *f)
 {
 	t_room *val;
 	t_list *out;
-	
+
 	val = (t_room *)ft_memalloc(sizeof(t_room));
 	out = (t_list *)ft_memalloc(sizeof(t_list));
 	val->num_ants = f->num_ants;
