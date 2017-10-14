@@ -6,7 +6,7 @@
 /*   By: bpuschel <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/13 16:51:46 by bpuschel          #+#    #+#             */
-/*   Updated: 2017/10/13 17:15:10 by bpuschel         ###   ########.fr       */
+/*   Updated: 2017/10/13 18:09:16 by bpuschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,11 +37,11 @@ t_htable		*h_new(void)
 	t_htable	*out;
 	int			i;
 
-	out = (t_htable *)ft_memalloc(sizeof(t_htable));
-	out->keys = (t_list **)ft_memalloc(H_SIZE * sizeof(t_list *));
-	out->values = (t_list **)ft_memalloc(H_SIZE * sizeof(t_list *));
+	out = (t_htable *)malloc(sizeof(t_htable));
+	out->keys = (t_list **)ft_memalloc(HASH * sizeof(t_list *));
+	out->values = (t_list **)ft_memalloc(HASH * sizeof(t_list *));
 	i = -1;
-	while (++i < H_SIZE)
+	while (++i < HASH)
 	{
 		out->keys[i] = NULL;
 		out->values[i] = NULL;
@@ -86,7 +86,7 @@ int				h_index(t_htable *h, char *k)
 	j = -1;
 	while (k[++j] != '\0')
 		i += k[j];
-	i = ABS(i % H_SIZE);
+	i = ABS(i % HASH);
 	while (h->keys[i])
 	{
 		curr = h->keys[i];
@@ -96,7 +96,7 @@ int				h_index(t_htable *h, char *k)
 				return (i);
 			curr = curr->next;
 		}
-		i = ABS((i + 1) % H_SIZE);
+		i = ABS((i + 1) % HASH);
 	}
 	return (i);
 }
@@ -110,7 +110,7 @@ void			h_del(t_htable **h)
 	i = -1;
 	if (*h)
 	{
-		while (++i < H_SIZE)
+		while (++i < HASH)
 		{
 			k = (*h)->keys[i];
 			v = (*h)->values[i];
