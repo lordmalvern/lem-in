@@ -6,7 +6,7 @@
 /*   By: bpuschel <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/13 09:12:48 by bpuschel          #+#    #+#             */
-/*   Updated: 2017/10/13 17:13:47 by bpuschel         ###   ########.fr       */
+/*   Updated: 2017/10/13 20:17:42 by bpuschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,14 +42,15 @@ static void		adj_add(t_room **a, t_room **b)
 	char	**a_new;
 	int		i;
 
-	a_new = (char **)ft_memalloc(((*a)->num_adj + 2) * sizeof(char *));
+	a_new = ft_memalloc(((*a)->num_adj + 2) * sizeof(char *));
 	i = -1;
-	while (++i < (*a)->num_adj && (*a)->adj[i])
+	while (++i < (*a)->num_adj && (*a)->adj && (*a)->adj[i] != NULL)
 	{
 		a_new[i] = ft_strdup((*a)->adj[i]);
 		ft_strdel(&((*a)->adj[i]));
 	}
 	a_new[i] = ft_strdup((*b)->r_name);
+	ft_strdel(&((*a)->adj[i]));
 	if ((*a)->adj)
 		free((*a)->adj);
 	(*a)->adj = a_new;

@@ -6,7 +6,7 @@
 /*   By: bpuschel <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/13 08:44:11 by bpuschel          #+#    #+#             */
-/*   Updated: 2017/10/13 15:24:54 by bpuschel         ###   ########.fr       */
+/*   Updated: 2017/10/13 18:41:03 by bpuschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ char			*pop(t_q *q)
 	if (q->start >= q->size)
 	{
 		q->start = 0;
-		if (q->size >= H_SIZE / 2 && q->end < q->size / 2)
+		if (q->size >= HASH / 2 && q->end < q->size / 2)
 		{
 			new_buf = (char **)ft_memalloc((q->size / 2) * sizeof(char *));
 			i = -1;

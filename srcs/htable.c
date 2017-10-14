@@ -6,7 +6,7 @@
 /*   By: bpuschel <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/13 16:51:46 by bpuschel          #+#    #+#             */
-/*   Updated: 2017/10/13 18:09:16 by bpuschel         ###   ########.fr       */
+/*   Updated: 2017/10/13 18:47:08 by bpuschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ t_htable		*h_new(void)
 		out->keys[i] = NULL;
 		out->values[i] = NULL;
 	}
+	out->size = 0;
 	return (out);
 }
 
@@ -114,8 +115,10 @@ void			h_del(t_htable **h)
 		{
 			k = (*h)->keys[i];
 			v = (*h)->values[i];
-			ft_lstdel(&k, char_del);
-			ft_lstdel(&v, room_del);
+			if (k)
+				ft_lstdel(&k, char_del);
+			if (v)
+				ft_lstdel(&v, room_del);
 			free(k);
 			free(v);
 		}

@@ -6,7 +6,7 @@
 /*   By: bpuschel <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/11 21:58:24 by bpuschel          #+#    #+#             */
-/*   Updated: 2017/10/13 15:59:11 by bpuschel         ###   ########.fr       */
+/*   Updated: 2017/10/13 19:34:40 by bpuschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@ static void	init_ends(t_room **r, t_htable **out, char *cur)
 		(*r)->r_name = ft_strdup(l[0]);
 		(*r)->x = ft_atoi(l[1]);
 		(*r)->y = ft_atoi(l[2]);
+		(*r)->num_adj = 0;
+		(*r)->adj = NULL;
 		h_insert(out, *r);
 	}
 	while (i >= 0)
