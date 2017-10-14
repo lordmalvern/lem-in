@@ -6,7 +6,7 @@
 /*   By: bpuschel <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/10 14:36:17 by bpuschel          #+#    #+#             */
-/*   Updated: 2017/10/13 18:08:44 by bpuschel         ###   ########.fr       */
+/*   Updated: 2017/10/13 21:00:26 by bpuschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,5 +74,5 @@ t_q				*new_q(void);
 void			push(t_q *q, char *c);
 char			*pop(t_q *q);
 
-int				is_valid(char *c);
+int				is_valid(char *c, t_htable *f);
 #endif

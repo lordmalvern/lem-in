@@ -6,7 +6,7 @@
 /*   By: bpuschel <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/11 21:58:24 by bpuschel          #+#    #+#             */
-/*   Updated: 2017/10/13 19:34:40 by bpuschel         ###   ########.fr       */
+/*   Updated: 2017/10/13 21:14:09 by bpuschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ static void	build(t_room **start, t_room **end, t_htable **out)
 	char	*cur;
 
 	cur = NULL;
-	while (get_next_line(0, &cur) && is_valid(cur))
+	while (get_next_line(0, &cur) && is_valid(cur, *out))
 	{
 		ft_printf("%s\n", cur);
 		if ((ft_strequ(cur, "##start") && (*start)->r_name)
